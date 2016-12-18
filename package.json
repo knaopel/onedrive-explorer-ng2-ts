@@ -1,0 +1,22 @@
+{
+  "name": "onedrive-explorer-ng2-ts",
+  "version": "0.0.1",
+  "description": "OneDrive sample application for Angular 2 TypeScript.",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knaopel/onedrive-explorer-ng2-ts.git"
+  },
+  "author": "Kurt Opel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/knaopel/onedrive-explorer-ng2-ts/issues"
+  },
+  "homepage": "https://github.com/knaopel/onedrive-explorer-ng2-ts#readme",
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}

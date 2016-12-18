@@ -1,0 +1,6 @@
+{
+    "https": true,
+    "server": {
+        "index": "default.html"
+    }
+}
