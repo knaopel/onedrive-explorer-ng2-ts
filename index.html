@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+
 <head>
   <title>onedrive explorer - default</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Polyfill(s) for older browsers -->
+  <script src="node_modules/core-js/client/shim.min.js"></script>
+
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/reflect-metadata/Reflect.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+
+  <script src="systemjs.config.js"></script>
+  <script>
+      System.import('app').catch(function (err) { console.error(err); });
+    </script>
+
 </head>
+
 <body>
+  <my-app>Loading AppComponent content here...</my-app>
   https://login.live.com/oauth20_authorize.srf?client_id=0fcfefd5-7cda-4081-b848-25826f90c7e9&scope=wl.signin&response_type=token&redirect_uri=https://localhost:3000/callback.html
 </body>
+
 </html>
