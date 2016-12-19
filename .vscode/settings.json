@@ -6,6 +6,8 @@
         "**/.hg": true,
         "**/.DS_Store": true,
         "node_modules/": true,
-        ".vscode": true
+        ".vscode": true,
+        "app/*.js": true,
+        "app/*.js.map": true
     }
 }
