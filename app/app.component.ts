@@ -4,14 +4,8 @@ import { OneDriveService } from './one-drive.service';
 @Component({
     selector: 'my-app',
     template: `
-    <a *ngIf="!loggedIn" id="loginText" (click)="challengeForAuth()" href="#">[sign in]</a>
     <div id="od-loading"></div>
-    <div id="od-breadcrumb">
-    </div>
-    <div id="od-content">
-        <div id="od-items" class="od-pagecol"></div>
-        <div id="od-json" class="od-pagecol"></div>
-    </div>
+    <router-outlet></router-outlet>
     `
 })
 export class AppComponent implements OnInit {
@@ -24,12 +18,12 @@ export class AppComponent implements OnInit {
         // this.challengeForAuth();
     }
     challengeForAuth() {
-        this.oneDrvSvc.challengeForAuth()
-            .then(token => {
-                this.token = token;
-                this.loggedIn = true;
-                console.log(this);
-            });
+        this.oneDrvSvc.challengeForAuth('00000000441B5345','onedrive.readonly wl.signin','https://localhost:3000/callback.html');
+            // .then(token => {
+            //     this.token = token;
+            //     this.loggedIn = true;
+            //     console.log(this);
+            // });
     }
 
 }
