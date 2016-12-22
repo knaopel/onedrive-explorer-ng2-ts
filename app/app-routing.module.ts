@@ -9,7 +9,8 @@ const routes: Routes = [
     { path: '', redirectTo: '/content', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'callback', component: CallbackComponent },
-    { path: 'content', component: ContentComponent }
+    { path: 'content', component: ContentComponent },
+    { path: 'content/:path', component: ContentComponent }
 ];
 
 @NgModule({

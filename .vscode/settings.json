@@ -7,8 +7,8 @@
         "**/.DS_Store": true,
         "node_modules/": true,
         ".vscode": true,
-        "app/*.js": true,
-        "app/*.js.map": true
+        "app/**/*.js": true,
+        "app/**/*.js.map": true
     }
 ,
 "typescript.tsdk": "./node_modules/typescript/lib"

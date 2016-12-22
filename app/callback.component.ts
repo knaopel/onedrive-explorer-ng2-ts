@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import{Router}from'@angular/router';
 
 @Component({
-    selector: 'my-app',
+    selector: 'app-callback',
     template: ''
 })
 export class CallbackComponent implements OnInit {

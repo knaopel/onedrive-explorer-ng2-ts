@@ -47,7 +47,7 @@ export class OneDriveService {
         let odUrl = '//api.onedrive.com/v1.0/drive/root';
 
         if (path) {
-            odUrl += `:${path}:`;
+            odUrl += `:${decodeURIComponent(path)}:`;
         }
 
         // the expand and select parameters mean:

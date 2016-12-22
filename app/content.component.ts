@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 // import { Http, Response } from '@angular/http';
 import { OneDriveService } from './one-drive.service';
+
+import 'rxjs/add/operator/switchMap';
 
 export class Crumb {
     name: string;
@@ -18,28 +20,55 @@ export class BreadCrumbComponent {
     crumb: Crumb;
 }
 
+
 @Component({
-    selector: 'my-app',
+    selector: 'app-content',
     template: `
     <div><crumb *ngFor="let crmb of breadcrumbs" [crumb]="crmb"></crumb></div>
     <div id="od-content">
-        <div id="od-items" class="od-pagecol"></div>
+        <div id="od-items" class="od-pagecol">
+            <a type="button" *ngFor="let child of data?.children"
+            [href]="'/content' + path + '/' + child.name">
+                <div class="item folder">
+                    <img *ngIf="child.thumbnails && child.thumbnails.length > 0" [src]="child.thumbnails[0].c200x150_Crop.url" />
+                    <div class="nameplate">{{child.name}}</div>
+                </div>
+            </a>
+        </div>
         <div id="od-json" class="od-pagecol"><pre>{{data | json}}</pre></div>
     </div>
     `
 })
 export class ContentComponent implements OnInit {
     private data: any;
+    private path: string;
     private breadCrumbs: Crumb[] = [];
-    constructor(private router: Router, private oneDrvSvc: OneDriveService) { }
-    ngOnInit() {
+    constructor(private router: Router, private route: ActivatedRoute, private oneDrvSvc: OneDriveService) { }
+    ngOnInit(): void {
         let token = this.getTokenFromCookie();
+
         if (token) {
-            this.onAuthenticated(token);
+            this.route.params
+                .switchMap((params: Params) => this.oneDrvSvc.getItemsForPath(token, this.setPath(params['path'])))
+                .subscribe(data => {
+                    // let path = params['path']
+                    this.data = data.json();
+                    console.log(data.json());
+                    //         this.data = data.json();
+                    // let decodedPath = decodeURIComponent(path);
+                    // document.title = `1drv ${decodedPath}`;
+                    // this.updateBreadcrumb(decodedPath);
+                });
+            // this.onAuthenticated(token);
         } else {
             this.router.navigate(['/login']);
         }
         // console.log(token);
+    }
+
+    setPath(_path: string): string {
+        this.path = _path;
+        return _path;
     }
     getTokenFromCookie(): string {
         let cookies = document.cookie;
@@ -61,22 +90,22 @@ export class ContentComponent implements OnInit {
         }
     }
 
-    onAuthenticated(token: string): void {
-        let path: string = null;
-        // we extract the onedrive path from the url fragment and we
-        // flank it with colons to use the api's path-based addressing scheme
-        if (window.location.hash) {
-            path = window.location.hash.substring(1);
-        }
+    // onAuthenticated(token: string): void {
+    //     let path: string = null;
+    //     // we extract the onedrive path from the url fragment and we
+    //     // flank it with colons to use the api's path-based addressing scheme
+    //     if (window.location.hash) {
+    //         path = window.location.hash.substring(1);
+    //     }
 
-        this.oneDrvSvc.getItemsForPath(token, path).then(data => {
-            console.log(data.json());
-            this.data = data.json();
-            let decodedPath = decodeURIComponent(path);
-            document.title = `1drv ${decodedPath}`;
-            this.updateBreadcrumb(decodedPath);
-        })
-    }
+    //     this.oneDrvSvc.getItemsForPath(token, path).then(data => {
+    //         console.log(data.json());
+    //         this.data = data.json();
+    //         let decodedPath = decodeURIComponent(path);
+    //         document.title = `1drv ${decodedPath}`;
+    //         this.updateBreadcrumb(decodedPath);
+    //     })
+    // }
 
     updateBreadcrumb(decodedPath: string): void {
         let path = decodedPath || '';
@@ -84,7 +113,7 @@ export class ContentComponent implements OnInit {
         paths.forEach(c => {
             let cr = new Crumb();
             cr.path = c;
-            cr.name =c;
+            cr.name = c;
             this.breadCrumbs.push(cr);
         })
     }
