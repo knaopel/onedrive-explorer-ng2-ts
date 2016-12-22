@@ -1,18 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Response } from '@angular/http';
+// import { Http, Response } from '@angular/http';
 import { OneDriveService } from './one-drive.service';
+
+export class Crumb {
+    name: string;
+    path: string;
+}
+
+@Component({
+    selector: 'crumb',
+    template: `
+    <span> > </span> <a [href]="crumb.path">{{crumb.name}}</a>`
+})
+export class BreadCrumbComponent {
+    @Input()
+    crumb: Crumb;
+}
 
 @Component({
     selector: 'my-app',
     template: `
+    <div><crumb *ngFor="let crmb of breadcrumbs" [crumb]="crmb"></crumb></div>
     <div id="od-content">
         <div id="od-items" class="od-pagecol"></div>
-        <div id="od-json" class="od-pagecol"></div>
+        <div id="od-json" class="od-pagecol"><pre>{{data | json}}</pre></div>
     </div>
     `
 })
 export class ContentComponent implements OnInit {
+    private data: any;
+    private breadCrumbs: Crumb[] = [];
     constructor(private router: Router, private oneDrvSvc: OneDriveService) { }
     ngOnInit() {
         let token = this.getTokenFromCookie();
@@ -53,6 +71,21 @@ export class ContentComponent implements OnInit {
 
         this.oneDrvSvc.getItemsForPath(token, path).then(data => {
             console.log(data.json());
+            this.data = data.json();
+            let decodedPath = decodeURIComponent(path);
+            document.title = `1drv ${decodedPath}`;
+            this.updateBreadcrumb(decodedPath);
+        })
+    }
+
+    updateBreadcrumb(decodedPath: string): void {
+        let path = decodedPath || '';
+        let paths = path.split('/');
+        paths.forEach(c => {
+            let cr = new Crumb();
+            cr.path = c;
+            cr.name =c;
+            this.breadCrumbs.push(cr);
         })
     }
 }
