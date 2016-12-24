@@ -27,13 +27,10 @@ export class BreadCrumbComponent {
     <div><crumb *ngFor="let crmb of breadcrumbs" [crumb]="crmb"></crumb></div>
     <div id="od-content">
         <div id="od-items" class="od-pagecol">
-            <a type="button" *ngFor="let child of data?.children"
-            [href]="'/content/' + this.encodePath(path) + '%2F' + child.name">
-                <div class="item folder">
-                    <img *ngIf="child.thumbnails && child.thumbnails.length > 0" [src]="child.thumbnails[0].c200x150_Crop.url" />
-                    <div class="nameplate">{{child.name}}</div>
-                </div>
-            </a>
+            <div *ngFor="let child of data?.children" class="item folder" (click)="onTileClicked(child)">
+                <img *ngIf="child.thumbnails && child.thumbnails.length > 0" [src]="child.thumbnails[0].c200x150_Crop.url" />
+                <div class="nameplate">{{child.name}}</div>
+            </div>
         </div>
         <div id="od-json" class="od-pagecol"><pre>{{data | json}}</pre></div>
     </div>
@@ -66,18 +63,19 @@ export class ContentComponent implements OnInit {
         // console.log(token);
     }
 
-    encodePath(_path: string): string {
-        if (_path) {
-            return encodeURIComponent(_path);
-        } else {
-            return '';
-        }
-    }
+    // encodePath(_path: string): string {
+    //     if (_path) {
+    //         return encodeURIComponent(_path);
+    //     } else {
+    //         return '';
+    //     }
+    // }
 
     setPath(_path: string): string {
         this.path = _path;
         return _path;
     }
+
     getTokenFromCookie(): string {
         let cookies = document.cookie;
         let name = 'odauth=';
@@ -96,6 +94,13 @@ export class ContentComponent implements OnInit {
         } else {
             return '';
         }
+    }
+
+    onTileClicked(child: any): void {
+        let path = child.parentReference.path.replace(/\/drive\/root:(.*)/g, '$1');
+        path = encodeURIComponent(`${path}/${child.name}`);
+        this.router.navigate(['/content', path]);
+        // console.log(child);
     }
 
     // onAuthenticated(token: string): void {
