@@ -28,7 +28,7 @@ export class BreadCrumbComponent {
     <div id="od-content">
         <div id="od-items" class="od-pagecol">
             <a type="button" *ngFor="let child of data?.children"
-            [href]="'/content' + path + '/' + child.name">
+            [href]="'/content/' + this.encodePath(path) + '%2F' + child.name">
                 <div class="item folder">
                     <img *ngIf="child.thumbnails && child.thumbnails.length > 0" [src]="child.thumbnails[0].c200x150_Crop.url" />
                     <div class="nameplate">{{child.name}}</div>
@@ -64,6 +64,14 @@ export class ContentComponent implements OnInit {
             this.router.navigate(['/login']);
         }
         // console.log(token);
+    }
+
+    encodePath(_path: string): string {
+        if (_path) {
+            return encodeURIComponent(_path);
+        } else {
+            return '';
+        }
     }
 
     setPath(_path: string): string {
