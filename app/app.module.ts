@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login.component';
 import { CallbackComponent } from './callback.component';
 import { ContentComponent, BreadCrumbComponent } from './content.component';
+import { TileComponent } from './tile.component';
 
 // Services
 import { OneDriveService } from './one-drive.service';
@@ -25,7 +26,8 @@ import { AppRoutingModule } from './app-routing.module';
         LoginComponent,
         CallbackComponent,
         ContentComponent,
-        BreadCrumbComponent
+        BreadCrumbComponent,
+        TileComponent
     ],
     providers: [OneDriveService],
     bootstrap: [AppComponent]
